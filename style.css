@@ -1436,6 +1436,8 @@ a:hover {
 }
 
 /* ---------- Responsive ---------- */
+
+/* Tablet */
 @media (max-width: 1024px) {
   .content-grid {
     grid-template-columns: 1fr;
@@ -1444,8 +1446,13 @@ a:hover {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .admin-page {
+    margin-top: var(--space-xl);
+  }
 }
 
+/* Mobile */
 @media (max-width: 640px) {
   .container {
     padding: 0 var(--space-md);
@@ -1455,8 +1462,33 @@ a:hover {
     display: none;
   }
 
+  .header__logo {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+
+  .header__title {
+    font-size: 1.1rem;
+  }
+
+  .theme-toggle {
+    width: 38px;
+    height: 38px;
+    font-size: 1rem;
+  }
+
+  /* Search */
+  .search-section {
+    padding: var(--space-xl) 0 var(--space-md);
+  }
+
   .search-section__title {
     font-size: 1.5rem;
+  }
+
+  .search-section__subtitle {
+    font-size: 0.85rem;
   }
 
   .search-box {
@@ -1464,11 +1496,47 @@ a:hover {
     border-radius: var(--radius-lg);
   }
 
+  .search-box__input {
+    padding: var(--space-md);
+  }
+
   .search-box__btn {
     border-radius: var(--radius-md);
     justify-content: center;
+    padding: var(--space-md);
   }
 
+  /* Announcement */
+  .announcement__inner {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .announcement__icon {
+    font-size: 1.2rem;
+  }
+
+  .announcement__title {
+    font-size: 0.8rem;
+  }
+
+  .announcement__message {
+    font-size: 0.8rem;
+  }
+
+  /* Data Status */
+  .data-status {
+    padding: 4px 10px;
+  }
+
+  .data-status__text {
+    font-size: 0.7rem;
+  }
+
+  .data-status__refresh {
+    font-size: 0.7rem;
+  }
+
+  /* Stats */
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-sm);
@@ -1482,14 +1550,51 @@ a:hover {
     font-size: 1.5rem;
   }
 
+  .stat-card__label {
+    font-size: 0.7rem;
+  }
+
+  /* Profile */
   .profile-card {
     flex-direction: column;
     text-align: center;
     padding: var(--space-lg);
+    gap: var(--space-md);
+  }
+
+  .profile-card__avatar {
+    width: 56px;
+    height: 56px;
+    font-size: 1.35rem;
+  }
+
+  .profile-card__name {
+    font-size: 1.15rem;
   }
 
   .profile-card__meta {
     justify-content: center;
+  }
+
+  .profile-card__meta-item {
+    font-size: 0.8rem;
+  }
+
+  /* Month Nav */
+  .month-nav__label {
+    font-size: 1rem;
+    min-width: 160px;
+  }
+
+  /* Calendar */
+  .calendar-card,
+  .table-card {
+    padding: var(--space-md);
+    border-radius: var(--radius-lg);
+  }
+
+  .calendar__cell {
+    font-size: 0.75rem;
   }
 
   .calendar-legend {
@@ -1497,30 +1602,139 @@ a:hover {
     gap: var(--space-sm);
   }
 
-  .month-nav__label {
-    font-size: 1rem;
-    min-width: 160px;
+  .calendar-legend__item {
+    font-size: 0.7rem;
   }
 
+  /* Detail Table */
+  .detail-table {
+    font-size: 0.75rem;
+  }
+
+  .detail-table th,
+  .detail-table td {
+    padding: var(--space-sm) var(--space-sm);
+  }
+
+  /* Day Detail Popup */
   .day-detail {
     min-width: unset;
-    width: 90vw;
+    width: 92vw;
+    padding: var(--space-lg);
+  }
+
+  .day-detail__title {
+    font-size: 1rem;
+  }
+
+  /* Setup Screen */
+  .setup-screen {
+    padding: var(--space-xl);
+    min-height: 60vh;
+  }
+
+  .setup-screen__icon {
+    font-size: 3rem;
+  }
+
+  .setup-screen__title {
+    font-size: 1.35rem;
+  }
+
+  .setup-screen__desc {
+    font-size: 0.9rem;
   }
 
   .setup-screen__input-group {
     flex-direction: column;
   }
 
+  /* Toast */
   .toast-container {
     left: var(--space-md);
     right: var(--space-md);
+    top: var(--space-md);
   }
 
   .toast {
     min-width: unset;
   }
 
+  .toast__message {
+    font-size: 0.8rem;
+  }
+
+  /* Footer */
   .footer {
     padding: var(--space-lg) var(--space-md);
+    font-size: 0.7rem;
+    line-height: 1.8;
+  }
+
+  /* Admin */
+  .admin-page {
+    margin-top: var(--space-xl);
+    padding: 0 var(--space-md);
+  }
+
+  .admin-card {
+    padding: var(--space-lg);
+  }
+
+  .admin-card__title {
+    font-size: 1.05rem;
+  }
+
+  .admin-card .btn-group {
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.85rem;
+  }
+
+  /* Recent searches */
+  .recent-searches {
+    gap: 4px;
+  }
+
+  .recent-tag {
+    font-size: 0.75rem;
+    padding: 3px 10px;
+  }
+}
+
+/* Small phones */
+@media (max-width: 360px) {
+  .header__brand {
+    gap: var(--space-sm);
+  }
+
+  .header__title {
+    font-size: 1rem;
+  }
+
+  .search-section__title {
+    font-size: 1.25rem;
+  }
+
+  .stat-card__value {
+    font-size: 1.25rem;
+  }
+
+  .calendar__cell {
+    font-size: 0.65rem;
+  }
+
+  .calendar__cell-dot {
+    width: 4px;
+    height: 4px;
+  }
+
+  .profile-card__avatar {
+    width: 48px;
+    height: 48px;
+    font-size: 1.1rem;
   }
 }
