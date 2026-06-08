@@ -77,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   loadConfig();
   loadAnnouncement();
+  updateScheduleTimeline();
   setupEventListeners();
   checkUrlParams();
 });
@@ -983,3 +984,51 @@ function getTimeAgo(date) {
 
   return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
 }
+
+// ============ Schedule Timeline ============
+function updateScheduleTimeline() {
+  const now = new Date();
+  const hour = now.getHours();
+
+  const point1 = $('schedulePoint1'); // 09:00
+  const point2 = $('schedulePoint2'); // 18:00
+  const point3 = $('schedulePoint3'); // 00:00
+  const lines = document.querySelectorAll('.schedule-line');
+  const note = $('scheduleNote');
+
+  if (!point1 || !point2 || !point3) return;
+
+  // Reset all
+  [point1, point2, point3].forEach(p => {
+    p.classList.remove('active', 'completed', 'upcoming');
+  });
+  lines.forEach(l => l.classList.remove('completed'));
+
+  // Determine state based on current hour
+  // Schedule: 00:00 -> 09:00 -> 18:00 -> 00:00
+  if (hour >= 0 && hour < 9) {
+    // After 00h, before 9h: 00h completed, waiting for 9h
+    point3.classList.add('completed');  // 00:00 done (previous cycle)
+    point1.classList.add('active');     // 09:00 is next
+    point2.classList.add('upcoming');   // 18:00 upcoming
+    note.textContent = `Lần cập nhật tiếp theo: 09:00 sáng hôm nay`;
+  } else if (hour >= 9 && hour < 18) {
+    // After 9h, before 18h: 9h completed, waiting for 18h
+    point1.classList.add('completed');  // 09:00 done
+    point2.classList.add('active');     // 18:00 is next
+    point3.classList.add('upcoming');   // 00:00 upcoming
+    if (lines[0]) lines[0].classList.add('completed');
+    note.textContent = `Đã cập nhật lúc 09:00 · Lần tiếp theo: 18:00 chiều nay`;
+  } else {
+    // After 18h, before 00h: 18h completed, waiting for 00h
+    point1.classList.add('completed');  // 09:00 done
+    point2.classList.add('completed');  // 18:00 done
+    point3.classList.add('active');     // 00:00 is next
+    if (lines[0]) lines[0].classList.add('completed');
+    if (lines[1]) lines[1].classList.add('completed');
+    note.textContent = `Đã cập nhật lúc 09:00 và 18:00 · Lần tiếp theo: 00:00 đêm nay`;
+  }
+}
+
+// Update schedule display every minute
+setInterval(updateScheduleTimeline, 60000);
