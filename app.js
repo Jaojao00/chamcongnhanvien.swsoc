@@ -1100,7 +1100,7 @@ function toggleFeedbackPanel() {
 
 function hideFeedbackCta() {
   const cta = $('feedbackCta');
-  if (cta) cta.classList.add('hidden');
+  if (cta) cta.style.display = 'none';
   sessionStorage.setItem('feedback_cta_dismissed', 'true');
 }
 
