@@ -953,10 +953,21 @@ function updateDataStatus() {
 // ============ Announcement ============
 function loadAnnouncement() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEYS.ANNOUNCEMENT);
-    if (!raw) return;
+    let raw = localStorage.getItem(STORAGE_KEYS.ANNOUNCEMENT);
+    let announcement = null;
 
-    const announcement = JSON.parse(raw);
+    if (raw) {
+      announcement = JSON.parse(raw);
+    } else {
+      // Default system announcement for new features
+      announcement = {
+        icon: '🚀',
+        title: 'Tính năng mới!',
+        message: 'Hệ thống đã hỗ trợ tra cứu dữ liệu chấm công của các tháng cũ bằng nút mũi tên (< >). Đồng thời ra mắt chức năng Góp ý ẩn danh ở góc trái màn hình!',
+        timestamp: '2026-06-10T00:00:00.000Z'
+      };
+    }
+
     if (!announcement || !announcement.message) return;
 
     // Check if user dismissed this specific announcement
