@@ -14,7 +14,7 @@
   <header class="header" id="header">
     <div class="container">
       <div class="header__brand">
-        <div class="header__logo">CC</div>
+        <img src="logo-agari.svg" alt="AGARI" class="header__logo-img">
         <div>
           <div class="header__title">Chấm Công</div>
           <div class="header__subtitle">Hệ thống tra cứu chấm công nhân viên</div>
@@ -258,6 +258,38 @@
       <p>© 2026 Hệ Thống Chấm Công · Powered by Tài Nguyễn I Gmail: tainguyenhr.dev@gmail.com I Số liên hệ Zalo: 0586482344</p>
     </div>
   </footer>
+
+  <!-- Feedback Widget -->
+  <div class="feedback-fab" id="feedbackFab" title="Gửi phản hồi">
+    <span class="feedback-fab__icon">💬</span>
+  </div>
+
+  <div class="feedback-panel" id="feedbackPanel">
+    <div class="feedback-panel__header">
+      <div class="feedback-panel__title">💬 Phản Hồi Ẩn Danh</div>
+      <button class="feedback-panel__close" id="feedbackClose">✕</button>
+    </div>
+
+    <div class="feedback-panel__body">
+      <!-- Submit Form -->
+      <div class="feedback-form" id="feedbackForm">
+        <div class="feedback-stars" id="feedbackStars">
+          <span class="feedback-star" data-value="1">★</span>
+          <span class="feedback-star" data-value="2">★</span>
+          <span class="feedback-star" data-value="3">★</span>
+          <span class="feedback-star" data-value="4">★</span>
+          <span class="feedback-star" data-value="5">★</span>
+        </div>
+        <div class="feedback-stars__label" id="starsLabel">Chọn số sao đánh giá</div>
+        <textarea class="input feedback-textarea" id="feedbackText" rows="3" placeholder="Nhập phản hồi của bạn (ẩn danh)..."></textarea>
+        <button class="btn btn--primary feedback-submit" onclick="submitFeedback()">📤 Gửi phản hồi</button>
+      </div>
+
+      <!-- Feedback List -->
+      <div class="feedback-list" id="feedbackList"></div>
+    </div>
+  </div>
+  <div class="feedback-overlay" id="feedbackOverlay"></div>
 
   <script src="app.js"></script>
 </body>

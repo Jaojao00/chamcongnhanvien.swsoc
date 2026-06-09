@@ -26,6 +26,7 @@ const STORAGE_KEYS = {
   THEME: 'attendance_theme',
   LAST_CODE: 'attendance_last_code',
   ANNOUNCEMENT: 'attendance_announcement',
+  FEEDBACK: 'attendance_feedback',
 };
 
 // ============ Column Mapping ============
@@ -78,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadConfig();
   loadAnnouncement();
   updateScheduleTimeline();
+  initFeedback();
   setupEventListeners();
   checkUrlParams();
 });
@@ -1032,3 +1034,137 @@ function updateScheduleTimeline() {
 
 // Update schedule display every minute
 setInterval(updateScheduleTimeline, 60000);
+
+// ============ Feedback Widget ============
+let feedbackRating = 0;
+
+function initFeedback() {
+  // FAB toggle
+  $('feedbackFab')?.addEventListener('click', toggleFeedbackPanel);
+  $('feedbackClose')?.addEventListener('click', closeFeedbackPanel);
+  $('feedbackOverlay')?.addEventListener('click', closeFeedbackPanel);
+
+  // Star rating
+  const stars = document.querySelectorAll('.feedback-star');
+  stars.forEach(star => {
+    star.addEventListener('click', () => {
+      feedbackRating = parseInt(star.dataset.value);
+      updateStars(feedbackRating);
+    });
+    star.addEventListener('mouseenter', () => {
+      updateStars(parseInt(star.dataset.value));
+    });
+  });
+
+  const starsContainer = $('feedbackStars');
+  starsContainer?.addEventListener('mouseleave', () => {
+    updateStars(feedbackRating);
+  });
+
+  renderFeedbackList();
+}
+
+function toggleFeedbackPanel() {
+  const panel = $('feedbackPanel');
+  const overlay = $('feedbackOverlay');
+  const fab = $('feedbackFab');
+  panel.classList.toggle('active');
+  overlay.classList.toggle('active');
+  if (panel.classList.contains('active')) {
+    fab.style.display = 'none';
+  }
+}
+
+function closeFeedbackPanel() {
+  $('feedbackPanel')?.classList.remove('active');
+  $('feedbackOverlay')?.classList.remove('active');
+  $('feedbackFab').style.display = 'flex';
+}
+
+function updateStars(rating) {
+  const stars = document.querySelectorAll('.feedback-star');
+  const labels = ['', 'Rất tệ', 'Tạm được', 'Bình thường', 'Tốt', 'Tuyệt vời! ❤️'];
+  stars.forEach(star => {
+    const val = parseInt(star.dataset.value);
+    star.classList.toggle('active', val <= rating);
+  });
+  const label = $('starsLabel');
+  if (label) label.textContent = rating > 0 ? labels[rating] : 'Chọn số sao đánh giá';
+}
+
+function submitFeedback() {
+  const text = $('feedbackText')?.value.trim();
+
+  if (feedbackRating === 0) {
+    showToast('Vui lòng chọn số sao đánh giá', 'warning');
+    return;
+  }
+
+  if (!text) {
+    showToast('Vui lòng nhập nội dung phản hồi', 'warning');
+    return;
+  }
+
+  // Save feedback
+  let feedbacks = [];
+  try {
+    feedbacks = JSON.parse(localStorage.getItem(STORAGE_KEYS.FEEDBACK) || '[]');
+  } catch { feedbacks = []; }
+
+  feedbacks.unshift({
+    rating: feedbackRating,
+    text: text,
+    time: new Date().toISOString(),
+  });
+
+  // Keep max 50 feedbacks
+  feedbacks = feedbacks.slice(0, 50);
+  localStorage.setItem(STORAGE_KEYS.FEEDBACK, JSON.stringify(feedbacks));
+
+  // Reset form
+  feedbackRating = 0;
+  updateStars(0);
+  $('feedbackText').value = '';
+
+  showToast('Đã gửi phản hồi ẩn danh! Cảm ơn bạn ❤️', 'success');
+  renderFeedbackList();
+}
+
+function renderFeedbackList() {
+  const container = $('feedbackList');
+  if (!container) return;
+
+  let feedbacks = [];
+  try {
+    feedbacks = JSON.parse(localStorage.getItem(STORAGE_KEYS.FEEDBACK) || '[]');
+  } catch { feedbacks = []; }
+
+  if (feedbacks.length === 0) {
+    container.innerHTML = '<div class="feedback-empty">✨ Chưa có phản hồi nào. Hãy là người đầu tiên!</div>';
+    return;
+  }
+
+  container.innerHTML = `<div class="feedback-divider">Phản hồi gần đây (${feedbacks.length})</div>`;
+
+  feedbacks.slice(0, 10).forEach(fb => {
+    const stars = '★'.repeat(fb.rating) + '☆'.repeat(5 - fb.rating);
+    const time = getTimeAgo(new Date(fb.time));
+
+    const item = document.createElement('div');
+    item.className = 'feedback-item';
+    item.innerHTML = `
+      <div class="feedback-item__header">
+        <span class="feedback-item__stars">${stars}</span>
+        <span class="feedback-item__time">${time}</span>
+      </div>
+      <div class="feedback-item__text">${escapeHtml(fb.text)}</div>
+    `;
+    container.appendChild(item);
+  });
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
