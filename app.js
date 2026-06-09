@@ -1062,6 +1062,7 @@ function initFeedback() {
   });
 
   renderFeedbackList();
+  startFloatingComments();
 }
 
 function toggleFeedbackPanel() {
@@ -1128,6 +1129,7 @@ function submitFeedback() {
 
   showToast('Đã gửi phản hồi ẩn danh! Cảm ơn bạn ❤️', 'success');
   renderFeedbackList();
+  restartFloatingComments();
 }
 
 function renderFeedbackList() {
@@ -1167,4 +1169,88 @@ function escapeHtml(text) {
   const div = document.createElement('div');
   div.textContent = text;
   return div.innerHTML;
+}
+
+// ============ TikTok Floating Comments ============
+let floatingIndex = 0;
+let floatingTimer = null;
+
+function startFloatingComments() {
+  stopFloatingComments();
+
+  let feedbacks = [];
+  try {
+    feedbacks = JSON.parse(localStorage.getItem(STORAGE_KEYS.FEEDBACK) || '[]');
+  } catch { feedbacks = []; }
+
+  if (feedbacks.length === 0) return;
+
+  floatingIndex = 0;
+
+  // Show first one after 2 seconds
+  floatingTimer = setTimeout(() => {
+    showNextFloating(feedbacks);
+  }, 2000);
+}
+
+function showNextFloating(feedbacks) {
+  if (feedbacks.length === 0) return;
+
+  const container = $('floatingComments');
+  if (!container) return;
+
+  // Don't show if feedback panel is open
+  const panel = $('feedbackPanel');
+  if (panel && panel.classList.contains('active')) {
+    floatingTimer = setTimeout(() => showNextFloating(feedbacks), 4000);
+    return;
+  }
+
+  const fb = feedbacks[floatingIndex % feedbacks.length];
+  floatingIndex++;
+
+  // Create bubble
+  const bubble = document.createElement('div');
+  bubble.className = 'floating-bubble';
+
+  const avatarIcons = ['😊', '👤', '🙂', '😄', '🤗', '😎', '🥳', '💪', '👋', '✌️'];
+  const randomIcon = avatarIcons[Math.floor(Math.random() * avatarIcons.length)];
+
+  const stars = '★'.repeat(fb.rating) + '☆'.repeat(5 - fb.rating);
+  const timeStr = getTimeAgo(new Date(fb.time));
+
+  bubble.innerHTML = `
+    <div class="floating-bubble__avatar">${randomIcon}</div>
+    <div class="floating-bubble__content">
+      <div class="floating-bubble__stars">${stars}</div>
+      <div class="floating-bubble__text">${escapeHtml(fb.text)}</div>
+      <div class="floating-bubble__time">${timeStr}</div>
+    </div>
+  `;
+
+  container.appendChild(bubble);
+
+  // Remove bubble after animation (4s)
+  setTimeout(() => {
+    bubble.remove();
+  }, 4200);
+
+  // Schedule next bubble
+  floatingTimer = setTimeout(() => {
+    showNextFloating(feedbacks);
+  }, 4500);
+}
+
+function stopFloatingComments() {
+  if (floatingTimer) {
+    clearTimeout(floatingTimer);
+    floatingTimer = null;
+  }
+}
+
+// Restart floating when new feedback is submitted
+function restartFloatingComments() {
+  const container = $('floatingComments');
+  if (container) container.innerHTML = '';
+  startFloatingComments();
 }

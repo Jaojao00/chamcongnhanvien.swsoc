@@ -1644,6 +1644,115 @@ a:hover {
   font-size: 0.8rem;
 }
 
+/* ---------- TikTok Floating Comments ---------- */
+.floating-comments {
+  position: fixed;
+  bottom: 90px;
+  left: 20px;
+  width: 280px;
+  height: 200px;
+  pointer-events: none;
+  z-index: 999;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 8px;
+}
+
+.floating-bubble {
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 8px 14px;
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 8px;
+  max-width: 100%;
+  animation: floatUp 4s ease-in-out forwards;
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  width: fit-content;
+}
+
+.floating-bubble__avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--primary-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: white;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.floating-bubble__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.floating-bubble__stars {
+  font-size: 0.65rem;
+  color: #f59e0b;
+  letter-spacing: 1px;
+  line-height: 1;
+}
+
+.floating-bubble__text {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1.35;
+  word-break: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.floating-bubble__time {
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  75% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+  }
+}
+
+/* Light theme adjustment */
+[data-theme="light"] .floating-bubble {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .floating-bubble__text {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+[data-theme="light"] .floating-bubble__time {
+  color: rgba(0, 0, 0, 0.4);
+}
+
 /* ---------- Admin Page ---------- */
 .admin-page {
   max-width: 700px;
@@ -2114,6 +2223,31 @@ a:hover {
     width: 100%;
     max-height: 70vh;
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
+
+  .floating-comments {
+    width: 220px;
+    bottom: 75px;
+    left: 12px;
+    height: 160px;
+  }
+
+  .floating-bubble {
+    padding: 6px 10px;
+  }
+
+  .floating-bubble__avatar {
+    width: 24px;
+    height: 24px;
+    font-size: 0.6rem;
+  }
+
+  .floating-bubble__text {
+    font-size: 0.7rem;
+  }
+
+  .floating-bubble__stars {
+    font-size: 0.55rem;
   }
 }
 
