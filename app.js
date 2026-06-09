@@ -1044,6 +1044,27 @@ function initFeedback() {
   $('feedbackClose')?.addEventListener('click', closeFeedbackPanel);
   $('feedbackOverlay')?.addEventListener('click', closeFeedbackPanel);
 
+  // CTA tooltip
+  $('feedbackCtaClose')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    hideFeedbackCta();
+  });
+  $('feedbackCta')?.addEventListener('click', () => {
+    hideFeedbackCta();
+    toggleFeedbackPanel();
+  });
+
+  // Show CTA after 3s if not dismissed
+  if (!sessionStorage.getItem('feedback_cta_dismissed')) {
+    setTimeout(() => {
+      const cta = $('feedbackCta');
+      if (cta) cta.style.display = 'block';
+    }, 3000);
+  } else {
+    const cta = $('feedbackCta');
+    if (cta) cta.classList.add('hidden');
+  }
+
   // Star rating
   const stars = document.querySelectorAll('.feedback-star');
   stars.forEach(star => {
@@ -1073,7 +1094,14 @@ function toggleFeedbackPanel() {
   overlay.classList.toggle('active');
   if (panel.classList.contains('active')) {
     fab.style.display = 'none';
+    hideFeedbackCta();
   }
+}
+
+function hideFeedbackCta() {
+  const cta = $('feedbackCta');
+  if (cta) cta.classList.add('hidden');
+  sessionStorage.setItem('feedback_cta_dismissed', 'true');
 }
 
 function closeFeedbackPanel() {
