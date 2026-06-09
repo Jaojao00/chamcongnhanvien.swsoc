@@ -398,7 +398,7 @@ function autoSelectMonth(data) {
   data.forEach((row) => {
     const dateStr = row[COL.date];
     if (dateStr) {
-      const d = new Date(dateStr);
+      const d = new Date(dateStr.replace(/-/g, '/'));
       if (!isNaN(d) && (!latestDate || d > latestDate)) {
         latestDate = d;
       }
@@ -511,7 +511,7 @@ function getMonthData() {
   return state.employeeData.filter((row) => {
     const dateStr = row[COL.date];
     if (!dateStr) return false;
-    const d = new Date(dateStr);
+    const d = new Date(dateStr.replace(/-/g, '/'));
     return d.getMonth() === state.currentMonth && d.getFullYear() === state.currentYear;
   });
 }
@@ -558,7 +558,7 @@ function renderCalendar() {
   state.employeeData.forEach((row) => {
     const dateStr = row[COL.date];
     if (!dateStr) return;
-    const d = new Date(dateStr);
+    const d = new Date(dateStr.replace(/-/g, '/'));
     if (d.getMonth() === month && d.getFullYear() === year) {
       const key = String(d.getDate());
       if (!dateMap[key]) dateMap[key] = [];
@@ -703,8 +703,8 @@ function renderDetailTable() {
 
   // Sort by date descending (newest first)
   monthData.sort((a, b) => {
-    const dateA = new Date(a[COL.date]);
-    const dateB = new Date(b[COL.date]);
+    const dateA = new Date((a[COL.date] || '').replace(/-/g, '/'));
+    const dateB = new Date((b[COL.date] || '').replace(/-/g, '/'));
     return dateB - dateA;
   });
 
@@ -720,7 +720,7 @@ function renderDetailTable() {
 
     // Date
     const dateStr = row[COL.date];
-    const d = new Date(dateStr);
+    const d = new Date(dateStr.replace(/-/g, '/'));
     const formattedDate = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}`;
 
     // Day of week

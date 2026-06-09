@@ -124,6 +124,8 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface-border) transparent;
 }
 
 body {
@@ -131,6 +133,7 @@ body {
   background: var(--bg-gradient);
   color: var(--text-primary);
   min-height: 100vh;
+  min-height: 100dvh;
   line-height: 1.6;
   overflow-x: hidden;
   position: relative;
@@ -194,6 +197,7 @@ a:hover {
   top: 0;
   z-index: var(--z-dropdown);
   background: var(--glass);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
   border-bottom: 1px solid var(--glass-border);
@@ -441,6 +445,7 @@ a:hover {
   max-width: 520px;
   margin: 0 auto;
   background: var(--glass);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   backdrop-filter: blur(var(--glass-blur));
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-xl);
@@ -595,6 +600,7 @@ a:hover {
 /* ---------- Profile Card ---------- */
 .profile-card {
   background: var(--glass);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   backdrop-filter: blur(var(--glass-blur));
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-xl);
@@ -706,6 +712,7 @@ a:hover {
 
 .stat-card {
   background: var(--glass);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   backdrop-filter: blur(var(--glass-blur));
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
@@ -774,6 +781,7 @@ a:hover {
 /* ---------- Calendar ---------- */
 .calendar-card {
   background: var(--glass);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   backdrop-filter: blur(var(--glass-blur));
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-xl);
@@ -935,6 +943,7 @@ a:hover {
 /* ---------- Detail Table Card ---------- */
 .table-card {
   background: var(--glass);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   backdrop-filter: blur(var(--glass-blur));
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-xl);
@@ -1044,6 +1053,7 @@ a:hover {
   left: 50%;
   transform: translate(-50%, -50%) scale(0.9);
   background: var(--bg-secondary);
+  -webkit-backdrop-filter: blur(30px);
   backdrop-filter: blur(30px);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-xl);
@@ -1193,6 +1203,8 @@ a:hover {
   color: var(--text-primary);
   outline: none;
   transition: all var(--transition-fast);
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .input:focus {
@@ -1266,6 +1278,7 @@ a:hover {
   box-shadow: var(--shadow-lg);
   animation: slideInRight 0.3s ease-out;
   min-width: 300px;
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
 }
 
@@ -1294,6 +1307,7 @@ a:hover {
 
 .schedule-card {
   background: var(--glass);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   backdrop-filter: blur(var(--glass-blur));
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-xl);
@@ -1741,6 +1755,7 @@ a:hover {
 
 .floating-bubble {
   background: rgba(0, 0, 0, 0.55);
+  -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   border-radius: 20px;
   padding: 8px 14px;
@@ -1842,6 +1857,7 @@ a:hover {
 
 .admin-card {
   background: var(--glass);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   backdrop-filter: blur(var(--glass-blur));
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-xl);
