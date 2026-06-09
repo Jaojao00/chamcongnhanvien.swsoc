@@ -274,59 +274,57 @@ function setSearchLoading(loading) {
 }
 
 // ============ Fetch & Parse Google Sheets ============
-async function fetchSheetData() {
-  const csvUrl = convertToCSVUrl(state.sheetUrl);
+async function fetchSheetData(sheetName = null) {
+  const csvUrl = getSheetCsvUrl(state.sheetUrl, sheetName);
   
   const response = await fetch(csvUrl);
   if (!response.ok) {
-    throw new Error(`Không thể tải dữ liệu (HTTP ${response.status}). Hãy chắc chắn Google Sheets đã được "Publish to web".`);
+    const name = sheetName || "mặc định";
+    throw new Error(`Không thể tải dữ liệu (HTTP ${response.status}) cho sheet ${name}.`);
   }
 
   const csvText = await response.text();
+  if (csvText.trim().startsWith('<html') || csvText.includes('Error')) {
+    const name = sheetName || "mặc định";
+    throw new Error(`Sheet "${name}" không tồn tại hoặc link chưa cấp quyền.`);
+  }
+
   state.rawData = parseCSV(csvText);
   state.lastFetchTime = new Date();
 
   if (state.rawData.length === 0) {
-    throw new Error('Không có dữ liệu trong Google Sheets. Hãy kiểm tra lại link.');
+    throw new Error('Không có dữ liệu hợp lệ.');
   }
 
   updateDataStatus();
 }
 
-function convertToCSVUrl(url) {
-  // Already a CSV export URL
-  if (url.includes('/pub?') && url.includes('output=csv')) {
-    return url;
-  }
-  if (url.includes('/export?') && url.includes('format=csv')) {
-    return url;
-  }
-
-  // Extract spreadsheet ID from various URL formats
+function getSheetCsvUrl(url, sheetName) {
   let spreadsheetId = '';
 
-  // Format: https://docs.google.com/spreadsheets/d/SPREADSHEET_ID/...
   const match = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
   if (match) {
     spreadsheetId = match[1];
+  } else if (/^[a-zA-Z0-9-_]{20,}$/.test(url.trim())) {
+    spreadsheetId = url.trim();
+  } else if (url.includes('pub?') || url.includes('export?')) {
+    const pubMatch = url.match(/id=([a-zA-Z0-9-_]+)/) || url.match(/\/d\/([a-zA-Z0-9-_]+)/);
+    if(pubMatch) spreadsheetId = pubMatch[1];
   }
 
   if (!spreadsheetId) {
-    // Maybe user pasted just the ID
-    if (/^[a-zA-Z0-9-_]{20,}$/.test(url.trim())) {
-      spreadsheetId = url.trim();
-    }
+    return url;
   }
 
-  if (!spreadsheetId) {
-    throw new Error('Không nhận diện được link Google Sheets. Hãy dán link đầy đủ hoặc link đã Publish to web.');
+  let baseUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:csv`;
+  if (sheetName) {
+    baseUrl += `&sheet=${encodeURIComponent(sheetName)}`;
+  } else {
+    const gidMatch = url.match(/[#&?]gid=(\d+)/);
+    const gid = gidMatch ? gidMatch[1] : '0';
+    baseUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv&gid=${gid}`;
   }
-
-  // Extract gid if present
-  const gidMatch = url.match(/[#&?]gid=(\d+)/);
-  const gid = gidMatch ? gidMatch[1] : '0';
-
-  return `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv&gid=${gid}`;
+  return baseUrl;
 }
 
 function parseCSV(csvText) {
@@ -448,7 +446,7 @@ function renderProfile() {
 }
 
 // ============ Month Navigation ============
-function changeMonth(delta) {
+async function changeMonth(delta) {
   state.currentMonth += delta;
   if (state.currentMonth < 0) {
     state.currentMonth = 11;
@@ -459,9 +457,36 @@ function changeMonth(delta) {
   }
 
   renderMonthLabel();
-  renderStats();
-  renderCalendar();
-  renderDetailTable();
+  
+  if (state.currentEmployee) {
+    try {
+      const db = $('dashboard');
+      if (db) db.style.opacity = '0.5';
+      
+      const sheetName = `THÁNG ${state.currentMonth + 1}`;
+      await fetchSheetData(sheetName);
+      
+      const empData = state.rawData.filter(
+        (row) => row[COL.code]?.toUpperCase() === state.currentEmployee.code.toUpperCase()
+      );
+      
+      state.employeeData = empData;
+      if (empData.length === 0) {
+        showToast(`Mã ${state.currentEmployee.code} chưa có dữ liệu trong ${sheetName}`, 'warning');
+      } else {
+        showToast(`Đã tải dữ liệu ${sheetName}`, 'success');
+      }
+    } catch(e) {
+      state.employeeData = [];
+      showToast(e.message, 'error');
+    } finally {
+      const db = $('dashboard');
+      if (db) db.style.opacity = '1';
+      renderStats();
+      renderCalendar();
+      renderDetailTable();
+    }
+  }
 }
 
 function renderMonthLabel() {
@@ -859,14 +884,24 @@ async function refreshData() {
   state.lastFetchTime = null;
 
   const code = $('searchInput')?.value.trim();
-  if (code) {
+  if (code && !state.currentEmployee) {
     await handleSearch();
   } else {
     try {
-      await fetchSheetData();
+      const sheetName = state.currentEmployee ? `THÁNG ${state.currentMonth + 1}` : null;
+      await fetchSheetData(sheetName);
+      
+      if (state.currentEmployee) {
+        state.employeeData = state.rawData.filter(
+          (row) => row[COL.code]?.toUpperCase() === state.currentEmployee.code.toUpperCase()
+        );
+        renderStats();
+        renderCalendar();
+        renderDetailTable();
+      }
       showToast('Dữ liệu đã được làm mới!', 'success');
     } catch (e) {
-      showToast('Lỗi khi làm mới dữ liệu', 'error');
+      showToast(e.message || 'Lỗi khi làm mới dữ liệu', 'error');
     }
   }
 
@@ -878,17 +913,8 @@ async function silentRefresh() {
   if (state.isLoading || !state.sheetUrl) return;
 
   try {
-    const csvUrl = convertToCSVUrl(state.sheetUrl);
-    const response = await fetch(csvUrl);
-    if (!response.ok) return;
-
-    const csvText = await response.text();
-    const newData = parseCSV(csvText);
-    if (newData.length === 0) return;
-
-    state.rawData = newData;
-    state.lastFetchTime = new Date();
-    updateDataStatus();
+    const sheetName = state.currentEmployee ? `THÁNG ${state.currentMonth + 1}` : null;
+    await fetchSheetData(sheetName);
 
     // If employee is currently displayed, re-render with fresh data
     if (state.currentEmployee) {
