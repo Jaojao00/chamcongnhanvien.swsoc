@@ -947,7 +947,15 @@ function updateDataStatus() {
 
   const now = state.lastFetchTime;
   const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-  textEl.textContent = `Dữ liệu cập nhật lúc ${timeStr} · ${state.rawData.length} bản ghi`;
+  
+  // Calculate unique employees
+  const uniqueCodes = new Set();
+  state.rawData.forEach(row => {
+    const code = row[COL.code];
+    if (code) uniqueCodes.add(code.toUpperCase());
+  });
+
+  textEl.textContent = `Dữ liệu cập nhật lúc ${timeStr} · ${state.rawData.length} bản ghi · ${uniqueCodes.size} nhân sự`;
 }
 
 // ============ Announcement ============
