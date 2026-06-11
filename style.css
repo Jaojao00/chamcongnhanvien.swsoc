@@ -591,6 +591,38 @@ a:hover {
   animation: spin 0.8s linear infinite;
 }
 
+.zalo-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 104, 255, 0.1);
+  color: #0068FF;
+  padding: 10px 20px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 104, 255, 0.2);
+}
+
+.zalo-link:hover {
+  background: rgba(0, 104, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 104, 255, 0.15);
+}
+
+[data-theme="dark"] .zalo-link {
+  background: rgba(0, 144, 255, 0.15);
+  color: #33a8ff;
+  border: 1px solid rgba(0, 144, 255, 0.25);
+}
+
+[data-theme="dark"] .zalo-link:hover {
+  background: rgba(0, 144, 255, 0.25);
+  box-shadow: 0 4px 12px rgba(0, 144, 255, 0.2);
+}
+
 /* ---------- Results Section ---------- */
 .results-section {
   padding-bottom: var(--space-3xl);
