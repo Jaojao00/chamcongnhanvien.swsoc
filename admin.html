@@ -307,6 +307,15 @@
     }
 
     function checkAuth() {
+      // Emergency password reset
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('reset') === 'true') {
+        localStorage.removeItem(STORAGE_KEYS.ADMIN_PW_HASH);
+        alert('Mật khẩu Admin đã được đặt lại về mặc định: admin@2026');
+        window.location.href = window.location.pathname;
+        return;
+      }
+
       const isLoggedIn = sessionStorage.getItem('admin_authenticated') === 'true';
       if (isLoggedIn) {
         showAdminContent();
