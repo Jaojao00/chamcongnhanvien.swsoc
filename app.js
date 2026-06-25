@@ -91,8 +91,12 @@ function initTheme() {
 }
 
 function loadConfig() {
-  // Load sheet URL
-  state.sheetUrl = localStorage.getItem(STORAGE_KEYS.SHEET_URL) || '';
+  // Hardcoded Global Sheet URL for 100% synchronization
+  const GLOBAL_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1QL85LUMkNJcOO0syvIM-UODJkRs_Y77qM2za24GKS_4/edit?gid=0#gid=0';
+  
+  // Always use the global sheet URL
+  state.sheetUrl = GLOBAL_SHEET_URL;
+  localStorage.setItem(STORAGE_KEYS.SHEET_URL, GLOBAL_SHEET_URL);
   
   // Load recent searches
   try {
