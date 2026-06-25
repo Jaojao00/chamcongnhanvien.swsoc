@@ -32,23 +32,33 @@
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- Login Screen -->
-  <div class="setup-screen" id="loginScreen">
-    <div class="setup-screen__icon">🔐</div>
-    <h1 class="setup-screen__title">Đăng Nhập Quản Trị</h1>
-    <p class="setup-screen__desc">
-      Vui lòng nhập mật khẩu admin để truy cập trang cấu hình hệ thống.
-    </p>
-    <div class="setup-screen__input-group" style="max-width: 400px;">
-      <input 
-        type="password" 
-        class="input" 
-        id="adminPassword" 
-        placeholder="Nhập mật khẩu admin..."
-        autocomplete="off"
-      >
-      <button class="btn btn--primary" id="loginBtn" onclick="handleLogin()">🔓 Đăng nhập</button>
+  <div class="setup-screen" id="loginScreen" style="background: url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=2000&auto=format&fit=crop') center/cover no-repeat; padding: 0; display: flex; align-items: center; justify-content: center;">
+    <div style="background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 0;"></div>
+    
+    <div style="background: rgba(10, 15, 20, 0.65); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 40px; width: 100%; max-width: 380px; position: relative; z-index: 1; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); text-align: center;">
+      <h1 style="color: white; font-size: 2rem; font-weight: 700; margin-bottom: 24px; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">Login</h1>
+      
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <input 
+          type="password" 
+          id="adminPassword" 
+          placeholder="Password"
+          autocomplete="off"
+          style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 8px; padding: 12px 16px; color: white; font-size: 1rem; outline: none; transition: all 0.3s ease;"
+          onfocus="this.style.borderColor='white'"
+          onblur="this.style.borderColor='rgba(255,255,255,0.3)'"
+        >
+        <button id="loginBtn" onclick="handleLogin()" style="background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 8px; color: white; font-size: 1rem; font-weight: 600; padding: 12px; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(0,0,0,0.5)'">
+          Login
+        </button>
+      </div>
+      
+      <p id="loginError" style="color: #ff6b6b; margin-top: 16px; font-size: 0.85rem; display: none;"></p>
+      
+      <div style="margin-top: 24px; color: rgba(255,255,255,0.6); font-size: 0.85rem;">
+        Hệ Thống Quản Trị
+      </div>
     </div>
-    <p id="loginError" style="color: var(--danger); margin-top: 12px; font-size: 0.85rem; display: none;"></p>
   </div>
 
   <!-- Admin Content (hidden until login) -->
