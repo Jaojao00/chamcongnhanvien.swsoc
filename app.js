@@ -156,13 +156,13 @@ function setupEventListeners() {
 
 function checkUrlParams() {
   const params = new URLSearchParams(window.location.search);
-  const sheetUrl = params.get('sheet');
   const code = params.get('code');
 
-  if (sheetUrl) {
-    state.sheetUrl = sheetUrl;
-    localStorage.setItem(STORAGE_KEYS.SHEET_URL, sheetUrl);
-    showScreen('search');
+  // Xóa param ?sheet khỏi URL để tránh lỗi dính URL cũ từ bookmark
+  if (params.has('sheet')) {
+    params.delete('sheet');
+    const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+    window.history.replaceState({}, '', newUrl);
   }
 
   if (code) {
