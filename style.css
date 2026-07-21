@@ -137,6 +137,19 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   position: relative;
+  transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1), color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Screen Entrance Animation */
+@keyframes screenFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* Animated background orbs */
@@ -292,7 +305,7 @@ a:hover {
   min-height: 70vh;
   text-align: center;
   padding: var(--space-2xl);
-  animation: fadeInUp 0.6s ease-out;
+  animation: screenFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .setup-screen__icon {
@@ -420,8 +433,9 @@ a:hover {
 
 /* ---------- Search Section ---------- */
 .search-section {
-  padding: var(--space-3xl) 0 var(--space-xl);
+  padding: var(--space-xxl) 0 var(--space-xl);
   text-align: center;
+  animation: screenFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .search-section__title {
@@ -449,8 +463,8 @@ a:hover {
   backdrop-filter: blur(var(--glass-blur));
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-xl);
-  padding: var(--space-xs);
-  transition: all var(--transition-base);
+  padding: var(--space-sm);
+  transition: all var(--transition-base), background 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease;
   box-shadow: var(--shadow-md);
 }
 
