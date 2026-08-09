@@ -64,35 +64,7 @@
   <!-- Admin Content (hidden until login) -->
   <div class="admin-page" id="adminContent" style="display: none;">
 
-    <!-- Card 1: Google Sheets URL -->
-    <div class="admin-card" style="animation: fadeInUp 0.4s ease-out;">
-      <div class="admin-card__title">🔗 Link Google Sheets</div>
-      
-      <input 
-        type="text" 
-        class="input" 
-        id="sheetUrlInput" 
-        placeholder="Dán link Google Sheets tại đây..."
-        spellcheck="false"
-      >
 
-      <div class="btn-group">
-        <button class="btn btn--primary" onclick="saveConfig()">💾 Lưu cấu hình</button>
-        <button class="btn btn--secondary" onclick="testConnection()">🔍 Kiểm tra kết nối</button>
-        <button class="btn btn--secondary" onclick="clearConfig()" style="margin-left: auto;">🗑️ Xóa</button>
-      </div>
-
-      <!-- Connection Status -->
-      <div id="connectionStatus" style="display: none; margin-top: 16px;"></div>
-
-      <!-- Data Preview -->
-      <div class="admin-preview" id="dataPreview" style="display: none;">
-        <table class="detail-table" id="previewTable">
-          <thead id="previewTableHead"></thead>
-          <tbody id="previewTableBody"></tbody>
-        </table>
-      </div>
-    </div>
 
     <!-- Card 2: Announcement -->
     <div class="admin-card" style="animation: fadeInUp 0.45s ease-out;">
