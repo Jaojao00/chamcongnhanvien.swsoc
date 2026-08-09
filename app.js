@@ -92,7 +92,7 @@ function initTheme() {
 
 function loadConfig() {
   // Hardcoded Global Sheet URL for 100% synchronization
-  const GLOBAL_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1QL85LUMkNJcOO0syvIM-UODJkRs_Y77qM2za24GKS_4/edit?gid=2039857467#gid=2039857467';
+  const GLOBAL_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1QL85LUMkNJcOO0syvlM-UODJkRs_Y77qM2za24GKS_4/edit?gid=568059651#gid=568059651';
   
   // Always use the global sheet URL
   state.sheetUrl = GLOBAL_SHEET_URL;
