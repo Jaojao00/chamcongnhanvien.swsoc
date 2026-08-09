@@ -90,13 +90,8 @@ function initTheme() {
   updateThemeIcon(savedTheme);
 }
 
-function loadConfig() {
-  // Hardcoded Global Sheet URL for 100% synchronization
-  const GLOBAL_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1QL85LUMkNJcOO0syvlM-UODJkRs_Y77qM2za24GKS_4/edit?gid=568059651#gid=568059651';
-  
-  // Always use the global sheet URL
-  state.sheetUrl = GLOBAL_SHEET_URL;
-  localStorage.setItem(STORAGE_KEYS.SHEET_URL, GLOBAL_SHEET_URL);
+async function loadConfig() {
+  const MASTER_CONFIG_URL = 'https://docs.google.com/spreadsheets/d/1zVfMsLBS7stVOZcdSUbiz6Zk-y97p7J01uagE6o3-XY/edit?gid=0#gid=0';
   
   // Load recent searches
   try {
@@ -104,19 +99,63 @@ function loadConfig() {
   } catch {
     state.recentSearches = [];
   }
+  
+  showScreen('search');
+  renderRecentSearches();
 
-  // Show appropriate screen
-  if (state.sheetUrl) {
-    showScreen('search');
-    renderRecentSearches();
-    
-    // Auto-search last code
-    const lastCode = localStorage.getItem(STORAGE_KEYS.LAST_CODE);
-    if (lastCode) {
-      $('searchInput').value = lastCode;
+  const select = $('regionSelect');
+  if (select) {
+    try {
+      const csvUrl = getSheetCsvUrl(MASTER_CONFIG_URL);
+      const response = await fetch(csvUrl);
+      if (!response.ok) throw new Error('Không thể tải Master Config');
+      
+      const csvText = await response.text();
+      const data = parseCSV(csvText, false); // pass false to disable employee code filtering
+      
+      select.innerHTML = '';
+      if (data.length === 0) {
+        select.innerHTML = '<option value="">Chưa có dữ liệu khu vực</option>';
+      } else {
+        data.forEach(row => {
+          // Support multiple header namings
+          const regionName = row['Khu Vực'] || row['Khu vực'] || Object.values(row)[0];
+          const regionLink = row['Link Dữ Liệu'] || row['Link dữ liệu'] || row['Link Google Sheets'] || Object.values(row)[1];
+          
+          if (regionName && regionLink) {
+            const option = document.createElement('option');
+            option.value = regionLink;
+            option.textContent = regionName;
+            select.appendChild(option);
+          }
+        });
+        
+        // Restore last selected region
+        const savedRegion = localStorage.getItem('SELECTED_REGION');
+        if (savedRegion && Array.from(select.options).some(opt => opt.value === savedRegion)) {
+          select.value = savedRegion;
+        }
+        
+        // Set initial state
+        state.sheetUrl = select.value;
+        localStorage.setItem(STORAGE_KEYS.SHEET_URL, state.sheetUrl);
+        
+        select.addEventListener('change', (e) => {
+          state.sheetUrl = e.target.value;
+          localStorage.setItem('SELECTED_REGION', state.sheetUrl);
+          localStorage.setItem(STORAGE_KEYS.SHEET_URL, state.sheetUrl);
+        });
+      }
+    } catch (error) {
+      console.error('Lỗi tải cấu hình gốc:', error);
+      select.innerHTML = '<option value="">Lỗi tải danh sách khu vực</option>';
     }
-  } else {
-    showScreen('setup');
+  }
+
+  // Auto-search last code
+  const lastCode = localStorage.getItem(STORAGE_KEYS.LAST_CODE);
+  if (lastCode) {
+    $('searchInput').value = lastCode;
   }
 }
 
@@ -331,26 +370,31 @@ function getSheetCsvUrl(url, sheetName) {
   return baseUrl;
 }
 
-function parseCSV(csvText) {
-  const lines = csvText.split('\n');
-  if (lines.length < 2) return [];
+function parseCSV(csvText, requireCode = true) {
+  const lines = csvText.split('\n').map(l => l.trim()).filter(l => l);
+  if (lines.length === 0) return [];
+  
+  const firstLine = parseCSVLine(lines[0]);
+  let hasHeaders = true;
+  
+  // If we don't require employee code (meaning it's config), and the first line contains a URL, it's not a header.
+  if (!requireCode && firstLine.some(val => val.includes('http'))) {
+    hasHeaders = false;
+  }
 
-  const headers = parseCSVLine(lines[0]);
   const data = [];
+  const startIndex = hasHeaders ? 1 : 0;
+  const headers = hasHeaders ? firstLine : ['Khu Vực', 'Link Dữ Liệu'];
 
-  for (let i = 1; i < lines.length; i++) {
-    const line = lines[i].trim();
-    if (!line) continue;
-
-    const values = parseCSVLine(line);
+  for (let i = startIndex; i < lines.length; i++) {
+    const values = parseCSVLine(lines[i]);
     const row = {};
 
     for (let j = 0; j < headers.length; j++) {
       row[headers[j]] = (values[j] || '').trim();
     }
 
-    // Only add rows that have a valid employee code
-    if (row[COL.code]) {
+    if (!requireCode || row[COL.code]) {
       data.push(row);
     }
   }
