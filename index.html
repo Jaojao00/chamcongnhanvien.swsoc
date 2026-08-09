@@ -80,23 +80,25 @@
         <p class="search-section__subtitle">Nhập mã CTV của bạn để kiểm tra lịch sử chấm công</p>
 
         <div class="search-box">
-          <select id="regionSelect" class="search-box__input" style="border-bottom: 1px solid var(--surface-border); border-radius: var(--radius-lg) var(--radius-lg) 0 0; font-weight: 500; cursor: pointer;">
-            <option value="">Đang tải danh sách khu vực...</option>
+          <select id="regionSelect" class="search-box__select">
+            <option value="">Đang tải...</option>
           </select>
-          <div style="display: flex; width: 100%;">
-            <input 
-              type="text" 
-              class="search-box__input" 
-              id="searchInput" 
-              placeholder="Nhập mã CTV... (VD: OPS12345)"
-              autocomplete="off"
-              style="border-radius: 0 0 0 var(--radius-lg);"
-            >
-            <button class="search-box__btn" id="searchBtn" onclick="handleSearch()" style="border-radius: 0 0 var(--radius-lg) 0;">
-              <span class="search-box__btn-text">🔍 Tra cứu</span>
-              <div class="spinner"></div>
-            </button>
-          </div>
+          
+          <div class="search-box__divider"></div>
+
+          <input 
+            type="text" 
+            class="search-box__input" 
+            id="searchInput" 
+            placeholder="Nhập mã CTV... (VD: OPS235529)"
+            autocomplete="off"
+            spellcheck="false"
+          >
+          
+          <button class="search-box__btn" id="searchBtn" onclick="handleSearch()">
+            <span class="search-box__btn-text">🔍 Tra cứu</span>
+            <div class="spinner"></div>
+          </button>
         </div>
 
         <!-- Zalo Notice -->
