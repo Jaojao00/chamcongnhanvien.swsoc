@@ -374,7 +374,7 @@ function parseCSV(csvText, requireCode = true) {
   const lines = csvText.split('\n').map(l => l.trim()).filter(l => l);
   if (lines.length === 0) return [];
   
-  const firstLine = parseCSVLine(lines[0]);
+  const firstLine = parseCSVLine(lines[0]).map(h => h.trim());
   let hasHeaders = true;
   
   // If we don't require employee code (meaning it's config), and the first line contains a URL, it's not a header.
@@ -462,15 +462,17 @@ function renderProfile() {
   const emp = state.currentEmployee;
   if (!emp) return;
 
+  const empName = emp.name || 'Unknown';
+
   // Avatar - first character of name
-  const nameParts = emp.name.split(' ');
+  const nameParts = empName.split(' ');
   const initials = nameParts.length >= 2
     ? nameParts[nameParts.length - 2][0] + nameParts[nameParts.length - 1][0]
-    : emp.name.substring(0, 2);
+    : empName.substring(0, 2);
   $('profileAvatar').textContent = initials.toUpperCase();
 
-  $('profileName').textContent = emp.name;
-  $('profileCode').textContent = `Mã CTV: ${emp.code}`;
+  $('profileName').textContent = empName;
+  $('profileCode').textContent = `Mã CTV: ${emp.code || 'N/A'}`;
 
   const meta = $('profileMeta');
   meta.innerHTML = '';
