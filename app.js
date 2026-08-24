@@ -266,11 +266,11 @@ async function handleSearch() {
     } else {
       state.employeeData = employeeData;
       state.currentEmployee = {
-        code: employeeData[0][COL.code],
-        name: employeeData[0][COL.name],
-        department: employeeData[0][COL.department],
+        code: employeeData[0][COL.code] || employeeData[0]['__col_2'] || 'N/A',
+        name: employeeData[0][COL.name] || employeeData[0]['__col_7'] || 'Unknown',
+        department: employeeData[0][COL.department] || employeeData[0]['__col_4'] || 'N/A',
         team: employeeData[0][COL.team],
-        location: employeeData[0][COL.location],
+        location: employeeData[0][COL.location] || employeeData[0]['__col_6'] || 'N/A',
         type: employeeData[0][COL.type],
         gender: employeeData[0][COL.gender],
         vendor: employeeData[0][COL.vendor],
@@ -391,7 +391,8 @@ function parseCSV(csvText, requireCode = true) {
     const row = {};
 
     for (let j = 0; j < headers.length; j++) {
-      row[headers[j]] = (values[j] || '').trim();
+      let h = headers[j] || ('__col_' + j);
+      row[h] = (values[j] || '').trim();
     }
 
     if (!requireCode || row[COL.code]) {
