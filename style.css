@@ -2697,3 +2697,15 @@ a:hover {
   .nd-decor-left { left: 0%; font-size: 2rem; }
   .nd-decor-right { right: 0%; font-size: 2rem; }
 }
+
+/* Mascot Image Styling */
+.nd-decor-right img {
+  width: 150px;
+  height: auto;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+}
+@media (max-width: 768px) {
+  .nd-decor-right img {
+    width: 90px;
+  }
+}
