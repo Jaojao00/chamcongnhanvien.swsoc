@@ -2460,3 +2460,240 @@ a:hover {
     font-size: 1.1rem;
   }
 }
+
+
+/* ============================================
+   🇻🇳 CHỦ ĐỀ QUỐC KHÁNH 2/9/2026 🇻🇳
+   ============================================ */
+
+:root, [data-theme="dark"], [data-theme="light"] {
+  /* Colors */
+  --bg-primary: #1a0203 !important;
+  --bg-secondary: #3b060a !important;
+  --bg-gradient: linear-gradient(135deg, #1c0203 0%, #4a060a 45%, #6a0000 100%) !important;
+
+  --surface: rgba(45, 3, 5, 0.5) !important;
+  --surface-hover: rgba(80, 5, 10, 0.6) !important;
+  --surface-active: rgba(120, 10, 15, 0.7) !important;
+  --surface-border: rgba(255, 215, 0, 0.25) !important; /* Gold border */
+
+  --glass: rgba(50, 0, 0, 0.45) !important;
+  --glass-border: rgba(255, 215, 0, 0.3) !important;
+
+  --primary: #da251d !important; /* Vietnam Flag Red */
+  --primary-light: #ffc107 !important; /* Gold Star */
+  --primary-gradient: linear-gradient(135deg, #da251d, #a80f09) !important;
+  --primary-glow: rgba(218, 37, 29, 0.6) !important;
+
+  --accent: #ffc107 !important;
+  --accent-light: #ffe066 !important;
+  --accent-glow: rgba(255, 193, 7, 0.5) !important;
+
+  /* Text colors for contrast */
+  --text-primary: #fff8e1 !important;
+  --text-secondary: #f3ce92 !important;
+  --text-tertiary: #c09a6a !important;
+}
+
+/* Background Effects */
+.nd-background {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.nd-glow {
+  position: absolute;
+  width: 100vw;
+  height: 60vh;
+  background: radial-gradient(ellipse at top, rgba(218, 37, 29, 0.25) 0%, transparent 70%);
+  top: 0; left: 0;
+}
+.nd-particles {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, #ffc107, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 50px 160px, #ffc107, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 90px 40px, #fff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 130px 80px, #ffc107, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 160px 120px, #fff, rgba(0,0,0,0));
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  animation: ndStars 120s linear infinite;
+  opacity: 0.35;
+}
+@keyframes ndStars {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-400px); }
+}
+.nd-fireworks {
+  position: absolute;
+  top: 10%; left: 15%;
+  width: 150px; height: 150px;
+  background: radial-gradient(circle, rgba(255,193,7,0.2) 10%, transparent 60%);
+  border-radius: 50%;
+  animation: pulse 4s ease-in-out infinite alternate;
+}
+.nd-fireworks::after {
+  content: '';
+  position: absolute;
+  top: 40%; right: -250%;
+  width: 100px; height: 100px;
+  background: radial-gradient(circle, rgba(218,37,29,0.3) 10%, transparent 60%);
+  border-radius: 50%;
+  animation: pulse 5s ease-in-out infinite alternate-reverse;
+}
+
+/* Banner Styling */
+.nd-banner-container {
+  text-align: center;
+  margin: var(--space-xl) 0 var(--space-xl);
+  animation: screenFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.nd-banner {
+  margin-bottom: var(--space-lg);
+  position: relative;
+  display: inline-block;
+  padding: 0 20px;
+}
+.nd-subtitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #ffc107;
+  text-transform: uppercase;
+  text-shadow: 0 2px 10px rgba(255, 193, 7, 0.4);
+  margin-bottom: -5px;
+}
+.nd-title {
+  font-size: 6rem;
+  font-weight: 900;
+  line-height: 1;
+  background: linear-gradient(180deg, #ffe066 0%, #ffc107 40%, #d49500 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0px 4px 15px rgba(255, 193, 7, 0.3));
+  margin: 0;
+  letter-spacing: -2px;
+}
+.nd-years {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(90deg, #b31b15, #da251d, #b31b15);
+  display: inline-block;
+  padding: 4px 24px;
+  border-radius: 50px;
+  margin-top: -15px;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  border: 1px solid rgba(255, 215, 0, 0.6);
+  letter-spacing: 1px;
+}
+
+/* Search Title Styling */
+.nd-search-title h3 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: var(--space-xs);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+.nd-search-title p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: var(--space-md);
+}
+
+/* Enhanced Cards */
+.search-box {
+  background: rgba(30, 2, 3, 0.75) !important;
+  border: 1px solid rgba(255, 215, 0, 0.4) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 0 15px rgba(218, 37, 29, 0.2) !important;
+}
+.search-box:focus-within {
+  border-color: #ffc107 !important;
+  box-shadow: 0 0 25px rgba(255, 193, 7, 0.3), inset 0 0 15px rgba(255, 193, 7, 0.1) !important;
+}
+.search-box__btn {
+  background: linear-gradient(135deg, #da251d, #a80f09) !important;
+  border: 1px solid rgba(255, 215, 0, 0.5) !important;
+  box-shadow: 0 4px 15px rgba(218, 37, 29, 0.5) !important;
+  color: #fff !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+.search-box__btn:hover {
+  box-shadow: 0 6px 25px rgba(255, 193, 7, 0.4) !important;
+  border-color: #ffc107 !important;
+}
+
+/* Timeline specific */
+.schedule-point:nth-child(1) .schedule-point__dot {
+  background: #34d399 !important;
+  box-shadow: 0 0 15px rgba(52,211,153,0.6) !important;
+}
+.schedule-point:nth-child(3) .schedule-point__dot {
+  background: #ffc107 !important;
+  box-shadow: 0 0 15px rgba(255,193,7,0.6) !important;
+}
+.schedule-point:nth-child(5) .schedule-point__dot {
+  background: #ff4757 !important;
+  box-shadow: 0 0 15px rgba(255,71,87,0.6) !important;
+}
+.schedule-line {
+  background: linear-gradient(90deg, #34d399, #ffc107, #ff4757) !important;
+  opacity: 0.6 !important;
+}
+
+/* Responsive Banner */
+@media (max-width: 480px) {
+  .nd-title { font-size: 4.5rem; }
+  .nd-subtitle { font-size: 0.95rem; }
+  .nd-search-title h3 { font-size: 1.5rem; }
+}
+
+/* Theme Toggle Button - Update to look like a star or flag */
+.theme-toggle {
+  background: rgba(255, 215, 0, 0.15) !important;
+  border: 1px solid rgba(255, 215, 0, 0.3) !important;
+  color: #ffc107 !important;
+}
+.theme-toggle:hover {
+  background: rgba(255, 215, 0, 0.25) !important;
+  box-shadow: 0 0 15px rgba(255, 193, 7, 0.3) !important;
+}
+
+/* Decor Emojis */
+.nd-banner-container {
+  position: relative;
+}
+.nd-decor-left, .nd-decor-right {
+  position: absolute;
+  top: 10%;
+  font-size: 2.5rem;
+  opacity: 0.8;
+  filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3));
+  animation: float 6s ease-in-out infinite;
+  z-index: 0;
+}
+.nd-decor-left {
+  left: 10%;
+  animation-delay: 0s;
+}
+.nd-decor-right {
+  right: 10%;
+  animation-delay: 3s;
+}
+@keyframes float {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(5deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+@media (max-width: 768px) {
+  .nd-decor-left { left: 0%; font-size: 2rem; }
+  .nd-decor-right { right: 0%; font-size: 2rem; }
+}
